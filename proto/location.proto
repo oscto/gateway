@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package location;
+
+option go_package = "./proto;location";
+
+service Location {
+	rpc Call(CallRequest) returns (CallResponse) {}
+}
+
+message CallRequest {
+	string ClientIp = 1;
+}
+
+message CallResponse {
+	string location = 1;
+}
+
