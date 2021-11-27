@@ -60,3 +60,7 @@ require (
 	gorm.io/datatypes v1.0.3 // indirect
 	gorm.io/gorm v1.22.2 // indirect
 )
+
+replace (
+	github.com/oscto/ky3k => /data/project/golang/src/oscto/ky3k
+)

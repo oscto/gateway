@@ -23,6 +23,7 @@ func main() {
 	r := gin.Default()
 	router.Account(r)
 	router.Location(r)
+	router.Image(r)
 	service.Handle("/", r)
 	if err := service.Run(); err != nil {
 		log.Panicln("启动错误,", err)
