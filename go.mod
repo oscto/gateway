@@ -62,5 +62,5 @@ require (
 )
 
 replace (
-	github.com/oscto/ky3k => /data/project/golang/src/oscto/ky3k
+	github.com/oscto/ky3k => /Volumes/data/project/golang/ky3k
 )

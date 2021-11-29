@@ -12,7 +12,7 @@ import (
 var AccountServiceName = "account.oscto.icu"
 
 func Account(r *gin.Engine) {
-	r.GET("/hello", func(ctx *gin.Context) {
+	r.POST("/hello", func(ctx *gin.Context) {
 		c := NewAccountClient()
 		login, err := c.Login(context.Background(), &account.LoginRequest{Email: "email", Password: "password"})
 		if err != nil {

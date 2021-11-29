@@ -2,61 +2,74 @@ package router
 
 import (
 	"context"
-	"gateway.oscto.icu/handler/image"
-	"github.com/gin-gonic/gin"
-	"github.com/oscto/ky3k"
-	"go-micro.dev/v4"
+	"fmt"
 	"net/http"
-	"strings"
+
+	"gateway.oscto.icu/handler/image"
+	"gateway.oscto.icu/metadata"
+	"github.com/gin-gonic/gin"
+	"go-micro.dev/v4"
 )
 
 var ImageServiceName = "image.oscto.icu"
 
-func Image(r *gin.Engine)  {
+func Image(r *gin.Engine) {
 
 	r.GET("/image", func(ctx *gin.Context) {
 
 	})
 	r.POST("/image/resize", func(ctx *gin.Context) {
+
+		var metaImage metadata.ImageResizeRequest
+		if err := ctx.BindJSON(&metaImage); err != nil {
+			fmt.Println("bind error", err)
+			return
+		}
 		client := NewImageClient()
 		resize, err := client.Resize(context.Background(), &image.CallRequest{
-			Url:    ctx.GetString("url"),
-			Width:  ctx.GetInt64("width"),
-			Height: ctx.GetInt64("height"),
+			Url:    metaImage.Url,
+			Width:  metaImage.Width,
+			Height: metaImage.Height,
 		})
 		if err != nil {
-			return 
+			fmt.Println("resize, error", err)
+			return
 		}
 
-		ctx.JSON(http.StatusOK,resize)
+		ctx.JSON(http.StatusOK, resize)
 	})
 	r.POST("/image/to-webp", func(ctx *gin.Context) {
+
+		var metaImage metadata.ImageToWebPRequest
+		if err := ctx.BindJSON(&metaImage); err != nil {
+			return
+		}
 		client := NewImageClient()
-		webp, err := client.ToWebP(context.Background(), &image.ToWebPRequest{Url: ctx.GetString("url")})
+		webp, err := client.ToWebP(context.Background(), &image.ToWebPRequest{Url: metaImage.Url})
 		if err != nil {
-			return 
+			fmt.Println("webp error", err)
+			return
 		}
 		ctx.JSON(http.StatusOK, webp)
 	})
 	r.POST("/image/draw", func(ctx *gin.Context) {
+		var metaImage metadata.ImageDrawRequest
+		if err := ctx.BindJSON(&metaImage); err != nil {
+			fmt.Println("bind error", err)
+			return
+		}
 		client := NewImageClient()
-		position := strings.Split(ctx.GetString("position"), ",")
-		var x0,x1,y0,y1 int64= 0,0,0,0
-		if len(position) >= 4 {
-			x0,_ = ky3k.StringToInt64(position[0])
-			y0,_ = ky3k.StringToInt64(position[1])
-			x1,_ = ky3k.StringToInt64(position[2])
-			y1,_ = ky3k.StringToInt64(position[3])
-		} else if len(position) >= 2 {
-			x1,_ = ky3k.StringToInt64(position[0])
-			y1,_ = ky3k.StringToInt64(position[1])
-		}
 		draw, err := client.Draw(context.Background(), &image.DrawRequest{
-			Url: ctx.GetString("url"), X0:  x0, X1:  x1, Y0:  y0, Y1:  y1,})
+			Url: metaImage.Url,
+			X0:  metaImage.X0,
+			X1:  metaImage.X1,
+			Y0:  metaImage.Y0,
+			Y1:  metaImage.Y1,
+		})
 		if err != nil {
-			return 
+			fmt.Println("draw err", err)
+			return
 		}
-
 		ctx.JSON(http.StatusOK, draw)
 	})
 }
