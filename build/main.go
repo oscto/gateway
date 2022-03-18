@@ -10,7 +10,7 @@ import (
 
 var (
 	GatewayServiceName    = "gateway.oscto.icu"
-	GatewayServiceAddress = ":8080"
+	GatewayServiceAddress = ""
 )
 
 func main() {
