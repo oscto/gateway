@@ -1,0 +1,13 @@
+---
+
+namespace: default
+
+resources:
+  - clusterrole.yaml
+  - deployment.yaml
+  - rolebinding.yaml
+
+configMapGenerator:
+  - name: gateway-env
+    envs:
+      - app.env
