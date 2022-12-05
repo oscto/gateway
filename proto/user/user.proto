@@ -5,40 +5,59 @@ package user;
 option go_package = "./proto;user";
 
 service User {
-	rpc Call(CallRequest) returns (CallResponse) {}
-	rpc ClientStream(stream ClientStreamRequest) returns (ClientStreamResponse) {}
-	rpc ServerStream(ServerStreamRequest) returns (stream ServerStreamResponse) {}
-	rpc BidiStream(stream BidiStreamRequest) returns (stream BidiStreamResponse) {}
+	rpc Register(RegisterRequest) returns (RegisterResponse) {}
+	rpc Login(LoginRequest) returns (LoginRequest) {}
+	rpc Logout(LogoutRequest) returns (LogoutRequest) {}
+	rpc Profile(ProfileRequest) returns (ProfileResponse){}
+	rpc Update(UpdateRequest) returns (UpdateResponse){}
 }
 
-message CallRequest {
-	string name = 1;
+message UserProfile {
+	enum Active {
+		enable = 0;
+		disable = 1;
+	}
+	string uuid = 1;
+	optional string username = 2;
+	optional string password = 3;
+	optional string avatar = 4;
+	optional string phone = 5;
+	optional string email = 6;
+	optional Active active = 7;
 }
 
-message CallResponse {
-	string msg = 1;
+message RegisterRequest{
+	string phone = 1;
+	string password = 2;
+}
+message RegisterResponse{
+	string uuid = 1;
+	string token = 2;
 }
 
-message ClientStreamRequest {
-	int64 stroke = 1;
+message LoginRequest{
+	string phone = 1;
+	string password = 2;
+}
+message LoginResponse{
+	string uuid = 1;
+	string token = 2;
 }
 
-message ClientStreamResponse {
-	int64 count = 1;
+message LogoutRequest{
+	string uuid = 1;
+}
+message LogoutResponse{}
+
+message ProfileRequest {
+	string uuid = 1;
 }
 
-message ServerStreamRequest {
-	int64 count = 1;
+message ProfileResponse {
+	UserProfile profile = 1;
 }
 
-message ServerStreamResponse {
-	int64 count = 1;
+message UpdateRequest{
+		UserProfile profile = 1;
 }
-
-message BidiStreamRequest {
-	int64 stroke = 1;
-}
-
-message BidiStreamResponse {
-	int64 stroke = 1;
-}
+message UpdateResponse{}

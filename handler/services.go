@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"git.vonechain.com/vone-bfs/gateway/proto/user"
-	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"go-micro.dev/v4/client"
 	"net/http"
@@ -28,8 +27,4 @@ func (s *Services) Register(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "success", "data": rsq})
-}
-
-func Casbin() {
-	casbin.NewEnforcer("path/to/model.conf", "path/to/policy.csv")
 }

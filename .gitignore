@@ -16,3 +16,4 @@
 
 # don't commit the service binary to vcs
 gateway
+.idea
